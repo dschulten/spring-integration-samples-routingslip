@@ -1,0 +1,7 @@
+### Send POST request with string body
+POST http://localhost:8080/transform?routing-slip=capitalize&routing-slip=lowercase
+Content-Type: text/plain
+
+camelCase
+
+###
