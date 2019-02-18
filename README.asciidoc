@@ -1,0 +1,4 @@
+= Routing Slip Example
+
+== Status
+Currently not working, see https://stackoverflow.com/questions/54742107/spring-integration-external-routing-slip

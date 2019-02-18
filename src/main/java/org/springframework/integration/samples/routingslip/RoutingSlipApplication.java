@@ -3,7 +3,6 @@ package org.springframework.integration.samples.routingslip;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
 import org.springframework.integration.IntegrationMessageHeaderAccessor;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
@@ -12,10 +11,6 @@ import org.springframework.integration.http.dsl.Http;
 import org.springframework.integration.routingslip.RoutingSlipRouteStrategy;
 import org.springframework.integration.transformer.support.RoutingSlipHeaderValueMessageProcessor;
 import org.springframework.messaging.MessageChannel;
-import org.springframework.util.StringUtils;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @SpringBootApplication
 public class RoutingSlipApplication {
