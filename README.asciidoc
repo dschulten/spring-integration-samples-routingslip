@@ -8,7 +8,9 @@ A spring-integration routing slip pojo or `RoutingSlipRouteStrategy` must return
 
 However, it is a singleton and therefore cannot maintain status information upon which it could decide which route is next.
 
-The solution is to maintain the status in headers.
+*Solution*
+
+A possible solution is to maintain the status in message headers.
 
 See `ExternalRoutingSlipRouteStrategy` and `ExternalRoutingSlipRoutePojo` and `RoutingSlipApplícation` for an example flow.
 
