@@ -93,10 +93,4 @@ public class RoutingSlipApplication {
         return new ExternalRoutingSlipRoutePojo();
     }
 
-
-    @Bean
-    TestRoutingSlipRoutePojo testRoutePojo() {
-        return new TestRoutingSlipRoutePojo();
-    }
-
 }
