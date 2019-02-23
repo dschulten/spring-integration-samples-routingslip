@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Maintains external routing slip. Requires two message headers for which it defines default header names.
+ * Processes external routing slip. Requires two message headers for which it defines default header names.
  * <ol>
  *     <li>External routing slip as {@code List<String>} by the header name {@link #ROUTING_SLIP_HEADER}</li>
  *     <li>External routing slip index as {@link AtomicInteger} by the header name
