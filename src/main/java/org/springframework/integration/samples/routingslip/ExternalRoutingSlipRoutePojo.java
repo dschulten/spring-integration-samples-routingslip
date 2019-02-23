@@ -7,15 +7,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExternalRoutingSlipRoutePojo {
 
-    public String get(Message<?> requestMessage, Object reply) {
+    public String next(Message<?> requestMessage, Object reply) {
 
         //noinspection unchecked
         List<String> routingSlip = (List<String>) requestMessage.getHeaders()
-            .get("routingSlipParam");
+            .get("externalRoutingSlip");
 
         //noinspection ConstantConditions
         int routingSlipIndex = requestMessage.getHeaders()
-            .get("counter", AtomicInteger.class)
+            .get("externalRoutingSlipIndex", AtomicInteger.class)
             .getAndIncrement();
 
         String routingSlipEntry;

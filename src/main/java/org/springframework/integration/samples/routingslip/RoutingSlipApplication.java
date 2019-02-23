@@ -29,23 +29,12 @@ public class RoutingSlipApplication {
     }
 
     /**
-     * Defines transformer chain.
-     * <ul>
-     * <li>defining the RoutingSlipHeaderValueMessage in a headerFunction does not work since the routingSlip
-     * must be a Map and we cannot execute processMap in the headerFunction because at that time the processor
-     * has no bean context to work with.</li>
-     * <li>we also cannot use an expression like <code>request.headers['routingSlipParam']</code> because
-     * expressions given to RoutingSlipHeaderValueMessageProcessor must return exactly one String</li>
-     * <li>the challenge is to create a RoutingSlipRouteStrategy which holds the routing slip list as internal state
-     * and returns a different item from the list each time</li>
-     * </ul>
-     *
-     * @return
+     * Defines transformer flow which takes a {@code routing-slip} parameter.
      * @see <a href="https://docs.spring.io/spring-integration/reference/html/#uri-template-variables-and-expressions">
      * Path variables and request params</a>
      */
     @Bean
-    public IntegrationFlow transformerChain(RoutingSlipRouteStrategy routeStrategy) {
+    public IntegrationFlow transformerChainWithRouteStrategy(RoutingSlipRouteStrategy routeStrategy) {
         return IntegrationFlows.from(
             Http.inboundGateway("/transform")
                 .headerExpression(ExternalRoutingSlipRouteStrategy.ROUTING_SLIP_HEADER,
@@ -61,9 +50,22 @@ public class RoutingSlipApplication {
             .logAndReply();
     }
 
+
     @Bean
-    public ExternalRoutingSlipRoutePojo externalRoutingSlipRoutePojo() {
-        return new ExternalRoutingSlipRoutePojo();
+    public IntegrationFlow transformerChainWithRoutePojo(RoutingSlipRouteStrategy routeStrategy) {
+        return IntegrationFlows.from(
+            Http.inboundGateway("/transform-with-pojo")
+                .headerExpression(ExternalRoutingSlipRouteStrategy.ROUTING_SLIP_HEADER,
+                    "#requestParams['routing-slip']")
+                .requestPayloadType(String.class))
+            .enrichHeaders(spec -> spec
+                .headerFunction(ExternalRoutingSlipRouteStrategy.ROUTING_SLIP_INDEX_HEADER,
+                    h -> new AtomicInteger())
+                .header(IntegrationMessageHeaderAccessor.ROUTING_SLIP,
+                    new RoutingSlipHeaderValueMessageProcessor("@routePojo.next(request, reply)")
+                )
+            )
+            .logAndReply();
     }
 
     @Bean

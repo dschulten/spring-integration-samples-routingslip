@@ -1,4 +1,15 @@
 = Routing Slip Example
 
-== Status
-Currently not working, see https://stackoverflow.com/questions/54742107/spring-integration-external-routing-slip
+== External routing slip
+
+*Problem*
+
+A spring-integration routing slip pojo or `RoutingSlipRouteStrategy` must return the name of the next channel to which a message should be routed, and it is asked for routes until its routes are exhausted, at which point it is supposed to return `null`.
+
+However, it is a singleton and therefore cannot maintain status information upon which it could decide which route is next.
+
+The solution is to maintain the status in headers.
+
+See `ExternalRoutingSlipRouteStrategy` and `ExternalRoutingSlipRoutePojo` and `RoutingSlipApplícation` for an example flow.
+
+Also see https://stackoverflow.com/questions/54742107/spring-integration-external-routing-slip

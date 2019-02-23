@@ -23,3 +23,9 @@ Content-Type: text/plain
 example
 
 ###
+POST http://localhost:8080/transform-with-pojo?routing-slip=uppercase&routing-slip=lowercase
+Content-Type: text/plain
+
+pojo
+
+###

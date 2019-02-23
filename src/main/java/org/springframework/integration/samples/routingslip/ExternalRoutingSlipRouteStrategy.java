@@ -80,5 +80,4 @@ public class ExternalRoutingSlipRouteStrategy implements RoutingSlipRouteStrateg
         this.externalRoutingSlipIndexHeader = externalRoutingSlipIndexHeader;
     }
 
-
 }
