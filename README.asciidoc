@@ -1,12 +1,21 @@
-= Routing Slip Example
+= Routing Slip Examples
 
 == External routing slip
 
+It should be possible to control a spring integration flow by means of a dynamic https://www.enterpriseintegrationpatterns.com/patterns/messaging/RoutingTable.html[routing slip] which can be given to the flow, e.g as a request parameter:
+
+----
+POST http://localhost:8080/transform?routing-slip=capitalize&routing-slip=lowercase
+Content-Type: text/plain
+
+example
+----
+
 *Problem*
 
-A spring-integration routing slip pojo or `RoutingSlipRouteStrategy` must return the name of the next channel to which a message should be routed, and it is asked for routes until its routes are exhausted, at which point it is supposed to return `null`.
+The `RoutingSlipHeaderValueMessageProcessor` takes a static routing slip and processes each item in the slip controlled by a routing slip index header. To make the behaviour dynamic, a routing slip entry can be a pojo or route strategy. Such a routing slip pojo or `RoutingSlipRouteStrategy` must return the name of the next channel to which a message should be routed, and it is asked for routes until its routes are exhausted, at which point it is supposed to return `null`.
 
-However, it is a singleton and therefore cannot maintain status information upon which it could decide which route is next.
+However, it is a singleton and therefore cannot maintain status information upon which it could decide which route is next. How can it access an external, dynamic routing slip and decide which of its routes is the current one?
 
 *Solution*
 
