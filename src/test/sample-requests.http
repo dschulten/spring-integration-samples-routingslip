@@ -2,6 +2,24 @@
 POST http://localhost:8080/transform?routing-slip=capitalize&routing-slip=lowercase
 Content-Type: text/plain
 
-camelCase
+example
+
+###
+POST http://localhost:8080/transform?routing-slip=uppercase&routing-slip=capitalize
+Content-Type: text/plain
+
+example
+
+###
+POST http://localhost:8080/transform?routing-slip=capitalize
+Content-Type: text/plain
+
+example
+
+###
+POST http://localhost:8080/transform
+Content-Type: text/plain
+
+example
 
 ###

@@ -2,25 +2,29 @@ package org.springframework.integration.samples.routingslip;
 
 import org.springframework.messaging.Message;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ExternalRoutingSlipRoutePojo {
 
-    private List<String> routingSlip;
-    private int i = 0;
-
     public String get(Message<?> requestMessage, Object reply) {
-        if (routingSlip == null) {
-            routingSlip = (LinkedList)requestMessage.getHeaders()
-                .get("routingSlipParam");
+
+        //noinspection unchecked
+        List<String> routingSlip = (List<String>) requestMessage.getHeaders()
+            .get("routingSlipParam");
+
+        //noinspection ConstantConditions
+        int routingSlipIndex = requestMessage.getHeaders()
+            .get("counter", AtomicInteger.class)
+            .getAndIncrement();
+
+        String routingSlipEntry;
+        if (routingSlip != null && routingSlipIndex < routingSlip.size()) {
+            routingSlipEntry = routingSlip.get(routingSlipIndex);
+        } else {
+            routingSlipEntry = null;
         }
-        try {
-            return this.routingSlip.get(i++);
-        } catch (Exception e) {
-            return null;
-        }
+        return routingSlipEntry;
     }
 
 }

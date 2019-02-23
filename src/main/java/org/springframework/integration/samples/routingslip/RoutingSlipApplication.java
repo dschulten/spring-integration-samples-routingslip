@@ -12,6 +12,9 @@ import org.springframework.integration.routingslip.RoutingSlipRouteStrategy;
 import org.springframework.integration.transformer.support.RoutingSlipHeaderValueMessageProcessor;
 import org.springframework.messaging.MessageChannel;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+
 @SpringBootApplication
 public class RoutingSlipApplication {
 
@@ -21,8 +24,10 @@ public class RoutingSlipApplication {
 
 
     public MessageChannel result() {
-        return MessageChannels.direct().get();
+        return MessageChannels.direct()
+            .get();
     }
+
     /**
      * Defines transformer chain.
      * <ul>
@@ -43,19 +48,17 @@ public class RoutingSlipApplication {
     public IntegrationFlow transformerChain(RoutingSlipRouteStrategy routeStrategy) {
         return IntegrationFlows.from(
             Http.inboundGateway("/transform")
-                .headerExpression("routingSlipParam", "#requestParams['routing-slip']")
+                .headerExpression(ExternalRoutingSlipRouteStrategy.ROUTING_SLIP_HEADER,
+                    "#requestParams['routing-slip']")
                 .requestPayloadType(String.class))
-            .enrichHeaders(spec -> spec.header(IntegrationMessageHeaderAccessor.ROUTING_SLIP,
-//                new RoutingSlipHeaderValueMessageProcessor(routeStrategy, "result")
-                new RoutingSlipHeaderValueMessageProcessor("@routePojo.get(request, reply)")
-                )
+            .enrichHeaders(spec -> spec
+                    .headerFunction(ExternalRoutingSlipRouteStrategy.ROUTING_SLIP_INDEX_HEADER,
+                        h -> new AtomicInteger())
+                    .header(IntegrationMessageHeaderAccessor.ROUTING_SLIP,
+                        new RoutingSlipHeaderValueMessageProcessor(routeStrategy)
+                    )
             )
             .logAndReply();
-    }
-
-    @Bean
-    public IntegrationFlow resultFlow() {
-        return IntegrationFlows.from("result").logAndReply();
     }
 
     @Bean
@@ -75,7 +78,7 @@ public class RoutingSlipApplication {
 
     @Bean
     IntegrationFlow capitalizeFlow() {
-        return IntegrationFlows.from("capitalize").<String, String>transform(source->source + " capitalize").get();
+        return IntegrationFlows.from("capitalize").<String, String>transform(source -> source + " capitalize").get();
     }
 
     @Bean
