@@ -24,3 +24,12 @@ A possible solution is to maintain the status in message headers.
 See `ExternalRoutingSlipRouteStrategy` and `ExternalRoutingSlipRoutePojo` and `RoutingSlipApplícation` for an example flow.
 
 Also see https://stackoverflow.com/questions/54742107/spring-integration-external-routing-slip
+
+== Grouping with Routing Slip
+
+Groups equal Strings, applies routing slip to group.
+
+The routing of single and grouped items *must* route to a specific channel, otherwise the group is swallowed and the routing slip is applied to all items instead (stranger things).
+
+See https://stackoverflow.com/questions/55393349/spring-integration-group-messages-by-classifier
+
